@@ -19,7 +19,7 @@ assertions  Total number of assertions for all tests in this file
 time        Aggregated time of all tests in this file in seconds
 timestamp   Date and time of when the test run was executed (in ISO 8601 format)
 -->
-<testsuites name="Test run" tests="8" failures="1" errors="1" skipped="1"
+<testsuites name="Complete Test run" tests="8" failures="1" errors="1" skipped="1"
     assertions="20" time="16.082687" timestamp="2021-04-02T15:48:23">
 
     <!-- <testsuite> A test suite usually represents a class, folder or group of tests.
@@ -36,7 +36,7 @@ timestamp   Date and time of when the test run was executed (in ISO 8601 format)
     timestamp   Date and time of when the test suite was executed (in ISO 8601 format)
     file        Source code file of this test suite
     -->
-    <testsuite name="Tests.Registration" tests="8" failures="1" errors="1" skipped="1"
+    <testsuite name="Complete.Tests.Registration" tests="8" failures="1" errors="1" skipped="1"
         assertions="20" time="16.082687" timestamp="2021-04-02T15:48:23"
         file="tests/registration.code">
 
