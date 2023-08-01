@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites time="15.682687">
+    <testsuite name="Tests.Registration" time="6.605871">
+        <testcase name="testCase1" classname="Tests.Registration" time="2.113871" />
+        <testcase name="testCase2" classname="Tests.Registration" time="1.051" />
+        <testcase name="testCase3" classname="Tests.Registration" time="3.441" />
+    </testsuite>
+     <testsuite name="Tests.Authentication.Login" time="4.356">
+        <testcase name="testCase4" classname="Tests.Authentication.Login" time="2.244" />
+        <testcase name="testCase5" classname="Tests.Authentication.Login" time="0.781" />
+        <testcase name="testCase6" classname="Tests.Authentication.Login" time="1.331" />
+    </testsuite>
+    <testsuite name="Tests.Authentication" time="9.076816">
+        <testcase name="testCase7" classname="Tests.Authentication" time="2.508" />
+        <testcase name="testCase8" classname="Tests.Authentication" time="1.230816" />
+        <testcase name="testCase9" classname="Tests.Authentication" time="0.982">
+            <failure message="Assertion error message" type="AssertionError">
+                add-recipe.spec.ts:31:5 add a recipe
+
+
+  [webkit] › add-recipe.spec.ts:31:5 › add a recipe ────────────────────────────────────────────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Target closed
+    =========================== logs ===========================
+    waiting for getByRole('button', { name: 'Log in with your email and password instead' })
+    ============================================================
+
+       at helpers/login.ts:9
+
+       7 |       name: "Log in with your email and password instead",
+       8 |     })
+    >  9 |     .click();
+         |      ^
+      10 |   //check if google popup is open
+      11 |   try {
+      12 |     const popupIframe = await page.frameLocator(
+
+        at login (/bitrise/src/e2e/helpers/login.ts:9:6)
+        at /bitrise/src/e2e/add-recipe.spec.ts:32:3
+
+    Pending operations:
+      - locator.click at e2e/helpers/login.ts:9:6
+
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/add-recipe-add-a-recipe-webkit/failure.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+            </failure>            
+        </testcase>
+    </testsuite>
+</testsuites>
