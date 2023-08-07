@@ -129,8 +129,8 @@ timestamp   Date and time of when the test run was executed (in ISO 8601 format)
                 <property name="priority" value="high" />
                 <property name="language" value="english" />
                 <property name="author" value="Adrian" />
-                <property name="attachment" value="screenshots/dashboard.png" />
-                <property name="attachment" value="screenshots/users.png" />
+                <property name="attachment" value="dashboard.png" />
+                <property name="attachment" value="users.png" />
                 <property name="description">
                     This text describes the purpose of this test case and provides
                     an overview of what the test does and how it works.
