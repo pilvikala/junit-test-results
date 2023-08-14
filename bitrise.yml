@@ -1,0 +1,256 @@
+format_version: "11"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: other
+pipelines:
+  test-pipeline:
+    stages:
+    - test: {}
+stages:
+  test:
+    workflows:
+    - unit-test: {}
+    - ui-test: {}
+    - xcode-only: {}
+workflows:
+  primary:
+    steps:
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            brew install xctesthtmlreport
+        title: install xcresulthtml
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*Test-Slingshot.xcresult'
+        - base_path: $BITRISE_SOURCE_DIR/xcode
+        - test_name: xcode tests
+        title: Export xcode test results
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*sample-ui-test.xml*'
+        - test_name: sample ui test
+        title: Export sample UI test results
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*sample-ui-test-flat.xml*'
+        - test_name: sample ui test - flat
+        title: export sample UI test - flat test results
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+
+            # Exporting the JUnit XML test report:
+
+            cp -r complete $BITRISE_TEST_RESULT_DIR
+        title: Export Complete test run
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+
+            # Exporting the JUnit XML test report:
+
+            cp -r with-screenshots $BITRISE_TEST_RESULT_DIR
+        title: Export Screenshots test run
+    - script@1:
+        title: convert test results to html
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            pushd xcode
+            xchtmlreport Test-Slingshot.xcresult
+            cp index.html $BITRISE_DEPLOY_DIR
+            popd
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Fail the workflow
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+
+            exit 1
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.3.x-ventura
+        machine_type_id: g2-m1.8core
+  ui-test:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*sample-ui-test.xml*'
+        - test_name: sample ui test
+        title: Export sample ui test results
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*sample-ui-test-flat.xml*'
+        - test_name: sample ui test - flat
+        title: Export sample ui test - flat results
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Fail the workflow
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+
+            exit 1
+  unit-test:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+
+            # Exporting the JUnit XML test report:
+
+            cp -r with-screenshots $BITRISE_TEST_RESULT_DIR
+        title: Export Complete test results
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Fail the workflow
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+
+            exit 1
+  xcode-only:
+    steps:
+    - script@1:
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            brew install xctesthtmlreport
+        title: install xcresulthtml
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - custom-test-results-export@1:
+        inputs:
+        - search_pattern: '*Test-Slingshot.xcresult*'
+        - base_path: $BITRISE_SOURCE_DIR/xcode
+        - test_name: xcode tests
+        title: Export xcode test results
+    - script@1:
+        title: convert test results to html
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            pushd xcode
+            xchtmlreport Test-Slingshot.xcresult
+            cp index.html $BITRISE_DEPLOY_DIR
+            popd
+    - deploy-to-bitrise-io@2: {}
+    - script@1:
+        title: Fail the workflow
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+
+            exit 1
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.3.x-ventura
+        machine_type_id: g2-m1.8core
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+    machine_type_id: standard
+trigger_map:
+- push_branch: main
+  workflow: primary
+- pull_request_source_branch: '*'
+  workflow: primary
